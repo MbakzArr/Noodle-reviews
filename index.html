@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ConfPilot Reviews</title>
+  <style>
+    :root {
+      --border-default: #51524f;
+      --border-alt: #6a6a67;
+      --actions-default: #07348a;
+      --actions-hover: #0747c0;
+      --actions-active: #205cd4;
+      --positive: #4dd78a;
+      --critical: #ffa99b;
+    }
+    body {
+      background-color: white;
+      color: #202124;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      background: var(--google-blue);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header img {
+      max-width: 150px;
+      float: left;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    .rating-summary {
+      background: #f8f8f8;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+    .review {
+      background: #f4f4f4;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border-left: 5px solid var(--border-alt);
+    }
+    .review .username {
+      font-weight: bold;
+      color: var(--actions-default);
+    }
+    .review .date {
+      font-size: 14px;
+      color: gray;
+    }
+    .review .rating {
+      color: var(--positive);
+    }
+    .review .rating.low {
+      color: var(--critical);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="Noodle-removebg-preview (1).png" alt="Noodle Reviews" />
+    <h1>Noodle Reviews</h1>
+  </div>
+  <div class="container">
+    <div class="rating-summary">
+      <!-- This header will be updated with the overall rating -->
+      <h2>Overall Rating: Calculating...</h2>
+    </div>
+
+    <div id="reviews">
+      <!-- Reviews will be appended here -->
+    </div>
+
+    <script>
+      // Initial hard-coded reviews
+      const reviewsData = [
+        {
+          "Username": "GameHunter1",
+          "Rating": 2,
+          "DateTime": "2025-02-23 13:13",
+          "Review": "Deposits went through instantly, but I can't withdraw my money! I have tried multiple times, but the support is unresponsive. It's really frustrating to be stuck like this."
+        },
+        {
+          "Username": "HighPlayer3",
+          "Rating": 1,
+          "DateTime": "2025-01-28 00:31",
+          "Review": "The verification process is way too complicated. I submitted my documents three times, but they keep rejecting them without a proper explanation. This is just a waste of time!"
+        },
+        // More reviews can be inserted here
+      ];
+
+      // --- REAL NAME GENERATION ---
+      const firstNames = [
+        "Alex", "Chris", "Jordan", "Taylor", "Morgan", "Casey", "Riley", "Cameron", "Dakota", "Devon", "Blake", "Avery", "Skylar", "Finley", "Emerson", "Harper", "Reagan", "Quinn", "Peyton", "Emery"
+      ];
+      const lastNames = [
+        "Wright", "Parker", "King", "Collins", "Jenkins", "Morris", "Cook", "Young", "Foster", "Harrison", "Murphy", "Russell", "Howard", "Campbell", "Mason", "Sanders", "Bennett", "Gray", "Welch", "Simpson"
+      ];
+
+      function generateUniqueName() {
+        const first = firstNames[Math.floor(Math.random() * firstNames.length)];
+        const last = lastNames[Math.floor(Math.random() * lastNames.length)];
+        return first + " " + last;
+      }
+
+      // --- REVIEW TEXT GENERATION ---
+      // Positive review phrases
+      const positiveReviews = [
+        "I had an amazing experience with this platform! Everything was smooth from start to finish.",
+        "This service exceeded my expectations. The customer support was top-notch, and the process was very efficient.",
+        "I’m so impressed with how easy everything was. The withdrawals were fast, and I’ve had no issues.",
+        "A wonderful platform to use! The customer service was excellent and resolved all my concerns quickly.",
+        "I had a flawless experience with this platform. Fast transactions and great support."
+      ];
+
+      // Neutral review phrases
+      const neutralReviews = [
+        "The platform was okay, but there were a few glitches. Overall, not bad but could use some improvements.",
+        "I didn’t experience any major issues, but there’s nothing special about the platform either.",
+        "The service was decent, but nothing stood out as great. It works but needs some updates.",
+        "It’s fine for basic use, but there’s room for improvement in speed and support.",
+        "An average experience. It did what I needed, but I wasn’t impressed either."
+      ];
+
+      // Negative review phrases
+      const negativeReviews = [
+        "I encountered several problems that ruined my experience. The withdrawals were delayed, and the support didn’t help at all.",
+        "The platform constantly had issues. I couldn't get any help when things went wrong.",
+        "I’m extremely frustrated. The system kept crashing, and I was unable to get a proper response from support.",
+        "The worst experience! My withdrawal was delayed, and the support was completely unhelpful. I would not recommend this.",
+        "A terrible experience overall. There were constant issues, and support was unresponsive. Don’t waste your time here."
+      ];
+
+      // Generate reviews with a ratio of 45% positive, 25% neutral, and 30% negative.
+      for (let i = 11; i <= 282; i++) {
+        const rand = Math.random();
+        let sentiment, reviewText, rating;
+       
+        if (rand < 0.45) {
+          sentiment = "positive";
+          reviewText = positiveReviews[Math.floor(Math.random() * positiveReviews.length)];
+          rating = 3;
+        } else if (rand < 0.70) {
+          sentiment = "neutral";
+          reviewText = neutralReviews[Math.floor(Math.random() * neutralReviews.length)];
+          rating = 2;
+        } else {
+          sentiment = "negative";
+          reviewText = negativeReviews[Math.floor(Math.random() * negativeReviews.length)];
+          rating = 1;
+        }
+
+        reviewsData.push({
+          "Username": generateUniqueName(),
+          "Rating": rating,
+          "DateTime": `2025-${String(Math.ceil(Math.random() * 12)).padStart(2, "0")}-${String(Math.ceil(Math.random() * 28)).padStart(2, "0")} ${String(Math.floor(Math.random() * 24)).padStart(2, "0")}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`,
+          "Review": reviewText
+        });
+      }
+
+      // Calculate overall average rating.
+      const totalReviews = reviewsData.length;
+      const sumRatings = reviewsData.reduce((sum, review) => sum + review.Rating, 0);
+      const avgRating = sumRatings / totalReviews;
+      const overallRatingOutOf5 = (avgRating * 5 / 3).toFixed(1);
+      document.querySelector('.rating-summary h2').innerText = `Overall Rating: ${overallRatingOutOf5}/5 ⭐`;
+
+      // Append reviews to the page
+      const reviewsContainer = document.getElementById("reviews");
+      reviewsData.forEach((review) => {
+        const reviewDiv = document.createElement("div");
+        reviewDiv.classList.add("review");
+        let stars = "⭐".repeat(review.Rating);
+        let sentimentClass = review.Rating < 3 ? "low" : "";
+        const [date, time] = review.DateTime.split(" ");
+        reviewDiv.innerHTML = `
+          <p class="username">${review.Username}</p>
+          <p class="date">${date} ${time}</p>
+          <p class="rating ${sentimentClass}">${stars}</p>
+          <p class="content">${review.Review}</p>
+        `;
+        reviewsContainer.appendChild(reviewDiv);
+      });
+    </script>
+  </div>
+</body>
+</html>
