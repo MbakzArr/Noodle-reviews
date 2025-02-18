@@ -15,19 +15,23 @@
       --critical: #ffa99b;
     }
     body {
-      background-color: white;
+      background-color: rgb(224, 224, 224);
       color: #202124;
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-    .header {
-      background: var(--google-blue);
+    .header, .footer {
+      background: #929bab;
       color: white;
       text-align: center;
-      padding: 20px;
+      padding: 10px;
+    }
+    .header {
       display: flex;
-      align-items: center;
       justify-content: center;
     }
     .header img {
@@ -35,9 +39,10 @@
       float: left;
     }
     .container {
-      max-width: 800px;
+      max-width: 1200px; /* Increased container width */
       margin: auto;
       padding: 20px;
+      flex: 1;
     }
     .rating-summary {
       background: #f8f8f8;
@@ -47,12 +52,22 @@
       margin-bottom: 20px;
       font-size: 20px;
     }
+    #reviews {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
     .review {
       background: #f4f4f4;
       padding: 15px;
-      margin-bottom: 15px;
       border-radius: 8px;
       border-left: 5px solid var(--border-alt);
+      min-width: 300px; /* Minimum width for each review */
+      max-width: 100%; /* Ensure it doesn't exceed the container width */
+      height: auto; /* Allow height to adjust based on content */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .review .username {
       font-weight: bold;
@@ -68,6 +83,31 @@
     .review .rating.low {
       color: var(--critical);
     }
+    .review .content {
+      word-wrap: break-word; /* Ensure long text wraps */
+      overflow: hidden; /* Prevent overflow */
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 10px;
+    }
+    .pagination button {
+      background: var(--actions-default);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .pagination button:hover {
+      background: var(--actions-hover);
+    }
+    .pagination button:disabled {
+      background: var(--border-alt);
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -77,7 +117,6 @@
   </div>
   <div class="container">
     <div class="rating-summary">
-      <!-- This header will be updated with the overall rating -->
       <h2>Overall Rating: Calculating...</h2>
     </div>
 
@@ -85,103 +124,129 @@
       <!-- Reviews will be appended here -->
     </div>
 
-    <script>
-      // Initial hard-coded reviews
-      const reviewsData = [
-        {
-          "Username": "GameHunter1",
-          "Rating": 2,
-          "DateTime": "2025-02-23 13:13",
-          "Review": "Deposits went through instantly, but I can't withdraw my money! I have tried multiple times, but the support is unresponsive. It's really frustrating to be stuck like this."
-        },
-        {
-          "Username": "HighPlayer3",
-          "Rating": 1,
-          "DateTime": "2025-01-28 00:31",
-          "Review": "The verification process is way too complicated. I submitted my documents three times, but they keep rejecting them without a proper explanation. This is just a waste of time!"
-        },
-        // More reviews can be inserted here
-      ];
+    <div class="pagination">
+      <button id="backButton" disabled>Back</button>
+      <button id="nextButton">Next</button>
+    </div>
+  </div>
+  <div class="footer">
+    <p>&copy; 2023 Noodle Reviews. All rights reserved.</p>
+  </div>
 
-      // --- REAL NAME GENERATION ---
-      const firstNames = [
-        "Alex", "Chris", "Jordan", "Taylor", "Morgan", "Casey", "Riley", "Cameron", "Dakota", "Devon", "Blake", "Avery", "Skylar", "Finley", "Emerson", "Harper", "Reagan", "Quinn", "Peyton", "Emery"
-      ];
-      const lastNames = [
-        "Wright", "Parker", "King", "Collins", "Jenkins", "Morris", "Cook", "Young", "Foster", "Harrison", "Murphy", "Russell", "Howard", "Campbell", "Mason", "Sanders", "Bennett", "Gray", "Welch", "Simpson"
-      ];
+  <script>
+    // Initial hard-coded reviews
+    const reviewsData = [
+      {
+        "Username": "Arrhenius",
+        "Rating": 2,
+        "DateTime": "2025-02-23 13:13",
+        "Review": "Deposits went through instantly, but I can't withdraw my money! I have tried multiple times, but the support is unresponsive. It's really frustrating to be stuck like this."
+      },
+      {
+        "Username": "Ntwani",
+        "Rating": 1,
+        "DateTime": "2025-01-28 00:31",
+        "Review": "The verification process is way too complicated. I submitted my documents three times, but they keep rejecting them without a proper explanation. This is just a waste of time!"
+      },
+      {
+        "Username": "Lumeka",
+        "Rating": 1,
+        "DateTime": "2025-01-28 00:31",
+        "Review": "My money dissapeared and I was never assisted to claim it back, I am very dissapointed with their help line"
+      },
+      // More reviews can be inserted here
+    ];
 
-      function generateUniqueName() {
-        const first = firstNames[Math.floor(Math.random() * firstNames.length)];
-        const last = lastNames[Math.floor(Math.random() * lastNames.length)];
-        return first + " " + last;
+    // --- REAL NAME GENERATION ---
+    const firstNames = [
+      "Arrhenius", "Lumza", "Ntwani", "Taylor", "Morgan", "Lumeka", "Riley", "Cameron", "Ntwanano", "Devon", "Blake", "Mbakz", "Skylar", "Tebza", "Emerson", "Harper", "Reagan", "Harvest", "Peyton", "Emery"
+    ];
+    const lastNames = [
+      "Mkhari", "Parker", "King", "Collins", "Jenkins", "Mathebz", "Cook", "Young", "Foster", "MbakzArr", "Murphy", "Russell", "Howard", "Campbell", "Mason", "Harviey", "Bennett", "Gray", "Welch", "Simpson"
+    ];
+
+    function generateUniqueName() {
+      const first = firstNames[Math.floor(Math.random() * firstNames.length)];
+      const last = lastNames[Math.floor(Math.random() * lastNames.length)];
+      return first + " " + last;
+    }
+
+    // --- REVIEW TEXT GENERATION ---
+    // Positive review phrases
+    const positiveReviews = [
+      "I had an amazing experience with this platform! Everything was smooth from start to finish.",
+      "This service exceeded my expectations. The customer support was top-notch, and the process was very efficient.",
+      "I’m so impressed with how easy everything was. The withdrawals were fast, and I’ve had no issues.",
+      "A wonderful platform to use! The customer service was excellent and resolved all my concerns quickly.",
+      "I had a flawless experience with this platform. Fast transactions and great support."
+    ];
+
+    // Neutral review phrases
+    const neutralReviews = [
+      "The platform was okay, but there were a few glitches. Overall, not bad but could use some improvements.",
+      "I didn’t experience any major issues, but there’s nothing special about the platform either.",
+      "The service was decent, but nothing stood out as great. It works but needs some updates.",
+      "It’s fine for basic use, but there’s room for improvement in speed and support.",
+      "An average experience. It did what I needed, but I wasn’t impressed either."
+    ];
+
+    // Negative review phrases
+    const negativeReviews = [
+      "I encountered several problems that ruined my experience. The withdrawals were delayed, and the support didn’t help at all.",
+      "The platform constantly had issues. I couldn't get any help when things went wrong.",
+      "I’m extremely frustrated. The system kept crashing, and I was unable to get a proper response from support.",
+      "The worst experience! My withdrawal was delayed, and the support was completely unhelpful. I would not recommend this.",
+      "A terrible experience overall. There were constant issues, and support was unresponsive. Don’t waste your time here."
+    ];
+
+    // Generate reviews with a ratio of 45% positive, 25% neutral, and 30% negative.
+    for (let i = 11; i <= 282; i++) {
+      const rand = Math.random();
+      let sentiment, reviewText, rating;
+     
+      if (rand < 0.45) {
+        sentiment = "positive";
+        reviewText = positiveReviews[Math.floor(Math.random() * positiveReviews.length)];
+        rating = 3;
+      } else if (rand < 0.70) {
+        sentiment = "neutral";
+        reviewText = neutralReviews[Math.floor(Math.random() * neutralReviews.length)];
+        rating = 2;
+      } else {
+        sentiment = "negative";
+        reviewText = negativeReviews[Math.floor(Math.random() * negativeReviews.length)];
+        rating = 1;
       }
 
-      // --- REVIEW TEXT GENERATION ---
-      // Positive review phrases
-      const positiveReviews = [
-        "I had an amazing experience with this platform! Everything was smooth from start to finish.",
-        "This service exceeded my expectations. The customer support was top-notch, and the process was very efficient.",
-        "I’m so impressed with how easy everything was. The withdrawals were fast, and I’ve had no issues.",
-        "A wonderful platform to use! The customer service was excellent and resolved all my concerns quickly.",
-        "I had a flawless experience with this platform. Fast transactions and great support."
-      ];
+      reviewsData.push({
+        "Username": generateUniqueName(),
+        "Rating": rating,
+        "DateTime": `2025-${String(Math.ceil(Math.random() * 12)).padStart(2, "0")}-${String(Math.ceil(Math.random() * 28)).padStart(2, "0")} ${String(Math.floor(Math.random() * 24)).padStart(2, "0")}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`,
+        "Review": reviewText
+      });
+    }
 
-      // Neutral review phrases
-      const neutralReviews = [
-        "The platform was okay, but there were a few glitches. Overall, not bad but could use some improvements.",
-        "I didn’t experience any major issues, but there’s nothing special about the platform either.",
-        "The service was decent, but nothing stood out as great. It works but needs some updates.",
-        "It’s fine for basic use, but there’s room for improvement in speed and support.",
-        "An average experience. It did what I needed, but I wasn’t impressed either."
-      ];
+    // Calculate overall average rating.
+    const totalReviews = reviewsData.length;
+    const sumRatings = reviewsData.reduce((sum, review) => sum + review.Rating, 0);
+    const avgRating = sumRatings / totalReviews;
+    const overallRatingOutOf5 = (avgRating * 5 / 3).toFixed(1);
+    document.querySelector('.rating-summary h2').innerText = `Overall Rating: ${overallRatingOutOf5}/5 ⭐`;
 
-      // Negative review phrases
-      const negativeReviews = [
-        "I encountered several problems that ruined my experience. The withdrawals were delayed, and the support didn’t help at all.",
-        "The platform constantly had issues. I couldn't get any help when things went wrong.",
-        "I’m extremely frustrated. The system kept crashing, and I was unable to get a proper response from support.",
-        "The worst experience! My withdrawal was delayed, and the support was completely unhelpful. I would not recommend this.",
-        "A terrible experience overall. There were constant issues, and support was unresponsive. Don’t waste your time here."
-      ];
+    // Pagination logic
+    let currentPage = 1;
+    const reviewsPerPage = 20;
+    const totalPages = Math.ceil(reviewsData.length / reviewsPerPage);
 
-      // Generate reviews with a ratio of 45% positive, 25% neutral, and 30% negative.
-      for (let i = 11; i <= 282; i++) {
-        const rand = Math.random();
-        let sentiment, reviewText, rating;
-       
-        if (rand < 0.45) {
-          sentiment = "positive";
-          reviewText = positiveReviews[Math.floor(Math.random() * positiveReviews.length)];
-          rating = 3;
-        } else if (rand < 0.70) {
-          sentiment = "neutral";
-          reviewText = neutralReviews[Math.floor(Math.random() * neutralReviews.length)];
-          rating = 2;
-        } else {
-          sentiment = "negative";
-          reviewText = negativeReviews[Math.floor(Math.random() * negativeReviews.length)];
-          rating = 1;
-        }
-
-        reviewsData.push({
-          "Username": generateUniqueName(),
-          "Rating": rating,
-          "DateTime": `2025-${String(Math.ceil(Math.random() * 12)).padStart(2, "0")}-${String(Math.ceil(Math.random() * 28)).padStart(2, "0")} ${String(Math.floor(Math.random() * 24)).padStart(2, "0")}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`,
-          "Review": reviewText
-        });
-      }
-
-      // Calculate overall average rating.
-      const totalReviews = reviewsData.length;
-      const sumRatings = reviewsData.reduce((sum, review) => sum + review.Rating, 0);
-      const avgRating = sumRatings / totalReviews;
-      const overallRatingOutOf5 = (avgRating * 5 / 3).toFixed(1);
-      document.querySelector('.rating-summary h2').innerText = `Overall Rating: ${overallRatingOutOf5}/5 ⭐`;
-
-      // Append reviews to the page
+    function displayReviews(page) {
       const reviewsContainer = document.getElementById("reviews");
-      reviewsData.forEach((review) => {
+      reviewsContainer.innerHTML = ""; // Clear existing reviews
+
+      const start = (page - 1) * reviewsPerPage;
+      const end = start + reviewsPerPage;
+      const paginatedReviews = reviewsData.slice(start, end);
+
+      paginatedReviews.forEach((review) => {
         const reviewDiv = document.createElement("div");
         reviewDiv.classList.add("review");
         let stars = "⭐".repeat(review.Rating);
@@ -195,7 +260,29 @@
         `;
         reviewsContainer.appendChild(reviewDiv);
       });
-    </script>
-  </div>
+
+      // Update button states
+      document.getElementById("backButton").disabled = page === 1;
+      document.getElementById("nextButton").disabled = page === totalPages;
+    }
+
+    // Initial display
+    displayReviews(currentPage);
+
+    // Pagination button event listeners
+    document.getElementById("nextButton").addEventListener("click", () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        displayReviews(currentPage);
+      }
+    });
+
+    document.getElementById("backButton").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        displayReviews(currentPage);
+      }
+    });
+  </script>
 </body>
 </html>
